@@ -92,7 +92,7 @@ notifier:
   disable_startup_check: true #true/false
   smtp:
     username: surajlalwani890@gmail.com #your email address
-    password: yjzgxkshzxmfhiiu #your email password
+    password: ########### #your email password
     host: smtp.gmail.com #email smtp server
     port: 587 #email smtp port
     sender: surajlalwani890@gmail.com
