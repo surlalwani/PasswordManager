@@ -1,0 +1,8 @@
+access_control: 
+  default_policy: deny
+  rules: ## bypass rule - 
+    - domain: - ""  #This should be your authentication URL 
+      policy: bypass
+
+    - domain: "" #example domain to protect 
+      policy: two_factor

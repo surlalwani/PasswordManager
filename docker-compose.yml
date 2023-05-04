@@ -1,0 +1,79 @@
+version: '3'
+
+services:
+
+  # mariadb:
+  #   container_name: mariadb
+  #   image: linuxserver/mariadb:latest
+  #   expose:
+  #     - 3306
+  #   volumes:
+  #     - /opt/appdata/mariadb:/config
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: "YOUR_MYSQL_ROOT_PASSWORD"
+  #     MYSQL_ROOT_USER: root
+  #     MYSQL_DATABASE: authelia
+  #     MYSQL_USER: authelia
+  #     MYSQL_PASSWORD: "YOUR_MYSQL_USER_PASSWORD"
+  #   networks:
+  #     - vm_network
+  #   restart: unless-stopped
+
+  authelia:
+    image:  authelia/authelia:latest
+    container_name: authelia
+    restart: unless-stopped
+    volumes:
+      - /opt/appdata/authelia/configuration.yml:/config/configuration.yml
+      - ./users_database.yml:/config/users_database.yml
+      # - ./rules.yml:/config/rules.yml
+    environment:
+      - TZ="Asia/Kolkata"
+      # - AUTH_LOCAL_STORAGE_PATH=/config/users_db.json
+      # - AUTHORIZATION_BACKEND=file
+      # - AUTHORIZATION_2FA_METHODS=totp
+    ports:
+      - 9091:9091
+    networks:
+      - vm_network
+    depends_on:
+      # - mariadb
+      - vaultwarden
+
+
+  vaultwarden:
+    image: vaultwarden/server
+    container_name: vaultwarden
+    restart: always
+    volumes:
+      - ./vw_data:/data
+    environment:
+      - ROCKET_PORT=8000
+    ports:
+      - 8080:8000 
+    networks:
+      - vm_network
+
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager'
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 81:81
+      - 443:443
+    volumes:
+      - ./nginx-proxy-manager:/config
+      - ./letsencrypt:/etc/letsencrypt
+    environment:
+      - TZ=Asia/Kolkata
+    networks:
+      - vm_network
+
+
+networks:
+  vm_network:
+    external: true
+
+
+

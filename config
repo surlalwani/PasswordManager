@@ -1,0 +1,16 @@
+notifier:
+  disable_startup_check: true #true/false
+  smtp:
+    username: surajlalwani890@gmail.com #your email address
+    password: ####### #your email password
+    host: smtp.gmail.com #email smtp server
+    port: 587 #email smtp port
+    sender: surajlalwani890@gmail.com
+    identifier: localhost
+    subject: "[Authelia] {title}" #email subject
+    startup_check_address: surajlalwani890@gmail.com
+    disable_require_tls: false
+    disable_html_emails: false
+    tls:
+      skip_verify: false
+      minimum_version: TLS1.2

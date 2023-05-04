@@ -1,0 +1,9 @@
+rules:
+  default_policy: deny
+  policies:
+    - name: "2fa_required"
+      description: "Require 2FA for accessing Vaultwarden"
+      match:
+        - "path:/vaultwarden/*"
+      actions:
+        - 2fa: {}

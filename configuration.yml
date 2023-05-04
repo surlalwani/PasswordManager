@@ -1,0 +1,106 @@
+# EXISTING AUTHELIA CONFIGURATION
+# yamllint disable rule:comments-indentation
+---
+###############################################################################
+#                           Authelia Configuration                            #
+###############################################################################
+
+theme: dark #light/dark
+jwt_secret: 1234567890abcdefghifjkl #any text or number you want to add here to create jwt Token
+
+default_redirection_url: https://google.com/ #where to redirect for a non-existent URL
+
+server:
+  host: 0.0.0.0
+  port: 9091
+  path: ""
+  read_buffer_size: 4096
+  write_buffer_size: 4096
+  enable_pprof: false
+  enable_expvars: false
+  disable_healthcheck: false
+  tls:
+    key: ""
+    certificate: ""
+
+log:
+  level: debug
+
+totp:
+  issuer: suraj.me #your authelia top-level domain
+  period: 30
+  skew: 1
+
+authentication_backend:
+  disable_reset_password: true
+#  deny_on_wrong_password:
+ #   message: "Wrong username or password"
+  refresh_interval: 5m
+  file:
+    path: /config/users_database.yml #this is where your authorized users are stored
+    password:
+      algorithm: argon2id
+      iterations: 1
+      key_length: 32
+      salt_length: 16
+      memory: 1024
+      parallelism: 8
+#  policy:
+ #   name: "two_factor" # Set the authentication policy to "two_factor"
+  #  two_factor:
+   #   methods: ["password", "totp"] # Use "password" as the first factor and "totp" as the second factor
+    #  ttl: 1800 # TTL for second factor (in seconds)
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: "vault.suraj.me" #This should be your authentication URL
+      policy: two_factor
+#      paths:
+ #       - path: "/*"
+    # add exceptions below (for domains that you don't want to protect)
+    - domain:
+         - "auth.suraj.me" #This should be your authentication URL
+      policy: bypass
+
+
+session:
+  name: authelia_session
+  secret: ft59RMQxH3b  #any text or number you want to add here to create jwt Token
+  expiration: 15  # 1 hour
+  inactivity: 15  # 5 minutes
+  domain: suraj.me  # Should match whatever your root protected domain is
+
+regulation:
+  max_retries: 3
+  find_time: 10m
+  ban_time: 12h
+
+storage:
+  local:
+    path: /config/db.sqlite3 #this is your databse
+  encryption_key: you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this #added Dec 5 2021
+#  mysql:
+ #   host: mariadb 
+  #  port: 3306 
+   # username: authelia 
+   # password: "YOUR_MYSQL_USER_PASSWORD"
+   # database: authelia
+     
+  
+notifier:
+  disable_startup_check: true #true/false
+  smtp:
+    username: surajlalwani890@gmail.com #your email address
+    password: yjzgxkshzxmfhiiu #your email password
+    host: smtp.gmail.com #email smtp server
+    port: 587 #email smtp port
+    sender: surajlalwani890@gmail.com
+    identifier: localhost
+    subject: "[Authelia] {title}" #email subject
+    startup_check_address: surajlalwani360@gmail.com
+    disable_require_tls: false
+    disable_html_emails: false
+    tls:
+      skip_verify: false
+      minimum_version: TLS1.2

@@ -1,0 +1,14 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+
+[alt_names]
+DNS.1 = devops.internal
+DNS.2 = auth.devops.internal
+DNS.3 = vault.devops.internal
+#DNS.3 = vault.suraj.me
+#OR
+#IP.1= 192.168.1.208:9091 [IP.1 IP.2 for ip addresses or DNS.1 for DNS names]
+#IP.2= 192.168.1.208:8080
