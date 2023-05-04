@@ -1,6 +1,6 @@
 location /authelia {
     internal;
-    set $upstream_authelia http://192.168.1.245:9091/api/verify;
+    set $upstream_authelia http://:9091/api/verify;
     proxy_pass_request_body off;
     proxy_pass $upstream_authelia;    
     proxy_set_header Content-Length "";
@@ -28,7 +28,7 @@ location /authelia {
 }
 
 location / {
-    set $upstream_address $forward_scheme://192.168.1.245:8080; #change ipport to match your app
+    set $upstream_address $forward_scheme://:8080; #change ipport to match your app
     proxy_pass $upstream_address; 
 
     auth_request /authelia;
